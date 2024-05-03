@@ -1,8 +1,9 @@
 import curses
 from curses import KEY_UP, KEY_DOWN
+import random
 
 # Constants for the game
-MAX_SCORE = 10
+MAX_SCORE = 5  # Game ends when a player reaches 5 points
 PADDLE_HEIGHT = 5  # Increased paddle height for better gameplay
 PADDLE_WIDTH = 5  # Increased paddle width for easier control
 BALL_SPEED = 1
@@ -94,13 +95,18 @@ def update_game(screen):
             reset_ball()
     return True  # Continue the game
 
-# Function to reset the ball to the center
+# Function to reset the ball to a random position and direction
 def reset_ball():
     global ball_x, ball_y, ball_dx, ball_dy
-    ball_x = curses.COLS // 2
-    ball_y = curses.LINES // 2
-    ball_dx = BALL_SPEED
-    ball_dy = BALL_SPEED
+    # Randomize ball's vertical position anywhere on the screen
+    ball_y = random.randint(0, curses.LINES - 1)
+    # Randomize ball's horizontal position within the middle 20% of the screen
+    horizontal_middle = curses.COLS // 2
+    offset = curses.COLS // 10  # 10% of the screen width to each side of the middle
+    ball_x = random.randint(horizontal_middle - offset, horizontal_middle + offset)
+    # Randomize ball's direction towards one of the four corners
+    ball_dx = BALL_SPEED * random.choice([-1, 1])
+    ball_dy = BALL_SPEED * random.choice([-1, 1])
     curses.beep()  # Sound effect for scoring
 
 # Main game loop
