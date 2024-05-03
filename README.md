@@ -1,5 +1,7 @@
 # Text-based Pong Game
 
+![Pong](pong.png)
+
 This is a simple text-based version of the classic Pong game implemented in Python. The game runs in a console and is controlled via keyboard inputs.
 
 ## Gameplay
