@@ -35,10 +35,12 @@ def draw_screen(screen):
 
     # Use color pair
     screen.attron(curses.color_pair(1))
+    paddle_representation = '|||'
     for i in range(PADDLE_HEIGHT):
-        screen.addstr(paddle1_y + i, 2, '|')
-        screen.addstr(paddle2_y + i, 77, '|')
-    screen.addstr(ball_y, ball_x, 'O')
+        screen.addstr(paddle1_y + i, 2, paddle_representation)
+        screen.addstr(paddle2_y + i, 77, paddle_representation)
+    ball_representation = '@'
+    screen.addstr(ball_y, ball_x, ball_representation)
     screen.attroff(curses.color_pair(1))
 
     # Centered score display
@@ -46,14 +48,17 @@ def draw_screen(screen):
     screen.addstr(0, (curses.COLS - len(score_text)) // 2, score_text)
 
     if paused:
-        screen.addstr(curses.LINES // 2, (curses.COLS // 2) - len('PAUSED') // 2, 'PAUSED')
+        pause_text = 'PAUSED - Press Esc to continue'
+        screen.addstr(curses.LINES // 2, (curses.COLS // 2) - len(pause_text) // 2, pause_text)
     if score1 >= MAX_SCORE:
-        screen.addstr(curses.LINES // 2, (curses.COLS // 2) - len('Player 1 wins!') // 2, 'Player 1 wins!')
+        win_text = 'Player 1 wins! Press R to restart or Q to quit.'
+        screen.addstr(curses.LINES // 2, (curses.COLS // 2) - len(win_text) // 2, win_text)
         screen.refresh()
         curses.napms(3000)  # Show the win message for 3 seconds
         return False  # End the game
     elif score2 >= MAX_SCORE:
-        screen.addstr(curses.LINES // 2, (curses.COLS // 2) - len('Player 2 wins!') // 2, 'Player 2 wins!')
+        win_text = 'Player 2 wins! Press R to restart or Q to quit.'
+        screen.addstr(curses.LINES // 2, (curses.COLS // 2) - len(win_text) // 2, win_text)
         screen.refresh()
         curses.napms(3000)  # Show the win message for 3 seconds
         return False  # End the game
