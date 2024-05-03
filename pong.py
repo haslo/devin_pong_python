@@ -4,6 +4,7 @@ from curses import KEY_UP, KEY_DOWN
 # Constants for the game
 MAX_SCORE = 10
 PADDLE_HEIGHT = 3
+PADDLE_WIDTH = 5  # Increased paddle width for easier control
 BALL_SPEED = 1
 
 # Initialize the game state
@@ -35,10 +36,10 @@ def draw_screen(screen):
 
     # Use color pair
     screen.attron(curses.color_pair(1))
-    paddle_representation = '|||'
+    paddle_representation = '|' * PADDLE_WIDTH  # Wider paddle representation
     for i in range(PADDLE_HEIGHT):
         screen.addstr(paddle1_y + i, 2, paddle_representation)
-        screen.addstr(paddle2_y + i, 77, paddle_representation)
+        screen.addstr(paddle2_y + i, curses.COLS - PADDLE_WIDTH - 1, paddle_representation)
     ball_representation = '@'
     screen.addstr(ball_y, ball_x, ball_representation)
     screen.attroff(curses.color_pair(1))
@@ -79,7 +80,7 @@ def update_game(screen):
         if ball_x <= 3 and paddle1_y <= ball_y <= paddle1_y + PADDLE_HEIGHT:
             ball_dx *= -1
             curses.beep()  # Sound effect for ball hitting the paddle
-        elif ball_x >= 76 and paddle2_y <= ball_y <= paddle2_y + PADDLE_HEIGHT:
+        elif ball_x >= curses.COLS - PADDLE_WIDTH - 1 and paddle2_y <= ball_y <= paddle2_y + PADDLE_HEIGHT:
             ball_dx *= -1
             curses.beep()  # Sound effect for ball hitting the paddle
         # Check for scoring
