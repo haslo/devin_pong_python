@@ -52,14 +52,14 @@ def draw_screen(screen):
         pause_text = 'PAUSED - Press Esc to continue'
         screen.addstr(curses.LINES // 2, (curses.COLS // 2) - len(pause_text) // 2, pause_text)
     if score1 >= MAX_SCORE:
-        win_text = 'Player 1 wins! Press R to restart or Q to quit.'
+        win_text = 'Player 1 wins!'
         screen.addstr(curses.LINES // 2, (curses.COLS // 2) - len(win_text) // 2, win_text)
         screen.refresh()
         curses.napms(5000)  # Wait for 5 seconds before closing
         screen.getch()  # Wait for a key press before closing
         return False  # End the game
     elif score2 >= MAX_SCORE:
-        win_text = 'Player 2 wins! Press R to restart or Q to quit.'
+        win_text = 'Player 2 wins!'
         screen.addstr(curses.LINES // 2, (curses.COLS // 2) - len(win_text) // 2, win_text)
         screen.refresh()
         curses.napms(5000)  # Wait for 5 seconds before closing
