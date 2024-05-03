@@ -3,7 +3,7 @@ from curses import KEY_UP, KEY_DOWN
 
 # Constants for the game
 MAX_SCORE = 10
-PADDLE_HEIGHT = 3
+PADDLE_HEIGHT = 5  # Increased paddle height for better gameplay
 PADDLE_WIDTH = 5  # Increased paddle width for easier control
 BALL_SPEED = 1
 
@@ -55,13 +55,13 @@ def draw_screen(screen):
         win_text = 'Player 1 wins! Press R to restart or Q to quit.'
         screen.addstr(curses.LINES // 2, (curses.COLS // 2) - len(win_text) // 2, win_text)
         screen.refresh()
-        curses.napms(3000)  # Show the win message for 3 seconds
+        screen.getch()  # Wait for a key press before closing
         return False  # End the game
     elif score2 >= MAX_SCORE:
         win_text = 'Player 2 wins! Press R to restart or Q to quit.'
         screen.addstr(curses.LINES // 2, (curses.COLS // 2) - len(win_text) // 2, win_text)
         screen.refresh()
-        curses.napms(3000)  # Show the win message for 3 seconds
+        screen.getch()  # Wait for a key press before closing
         return False  # End the game
     screen.refresh()  # Refresh the screen to show changes
     return True  # Continue the game
