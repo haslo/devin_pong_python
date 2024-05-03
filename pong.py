@@ -29,39 +29,61 @@ def init_screen(screen):
 # Function to draw the game state
 def draw_screen(screen):
     screen.clear()  # Clear the screen
-    # Draw the paddles and ball
+    # Initialize color pairs
+    curses.start_color()
+    curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
+
+    # Use color pair
+    screen.attron(curses.color_pair(1))
     for i in range(PADDLE_HEIGHT):
         screen.addstr(paddle1_y + i, 2, '|')
         screen.addstr(paddle2_y + i, 77, '|')
     screen.addstr(ball_y, ball_x, 'O')
-    # Draw the scores
-    screen.addstr(0, 35, f'Score: {score1} - {score2}')
+    screen.attroff(curses.color_pair(1))
+
+    # Centered score display
+    score_text = f'Score: {score1} - {score2}'
+    screen.addstr(0, (curses.COLS - len(score_text)) // 2, score_text)
+
+    if paused:
+        screen.addstr(curses.LINES // 2, (curses.COLS // 2) - len('PAUSED') // 2, 'PAUSED')
+    if score1 >= MAX_SCORE:
+        screen.addstr(curses.LINES // 2, (curses.COLS // 2) - len('Player 1 wins!') // 2, 'Player 1 wins!')
+        screen.refresh()
+        curses.napms(3000)  # Show the win message for 3 seconds
+        return False  # End the game
+    elif score2 >= MAX_SCORE:
+        screen.addstr(curses.LINES // 2, (curses.COLS // 2) - len('Player 2 wins!') // 2, 'Player 2 wins!')
+        screen.refresh()
+        curses.napms(3000)  # Show the win message for 3 seconds
+        return False  # End the game
     screen.refresh()  # Refresh the screen to show changes
+    return True  # Continue the game
 
 # Function to update the game state
-def update_game():
-    global ball_x, ball_y, ball_dx, ball_dy, score1, score2
-    # Update ball position
-    ball_x += ball_dx
-    ball_y += ball_dy
-    # Check for collision with top and bottom
-    if ball_y <= 0 or ball_y >= curses.LINES - 1:
-        ball_dy *= -1
-    # Check for collision with paddles
-    if ball_x <= 3 and paddle1_y <= ball_y <= paddle1_y + PADDLE_HEIGHT:
-        ball_dx *= -1
-    elif ball_x >= 76 and paddle2_y <= ball_y <= paddle2_y + PADDLE_HEIGHT:
-        ball_dx *= -1
-    # Check for scoring
-    if ball_x <= 0:
-        score2 += 1
-        reset_ball()
-    elif ball_x >= curses.COLS - 1:
-        score1 += 1
-        reset_ball()
-    # Check for win condition
-    if score1 >= MAX_SCORE or score2 >= MAX_SCORE:
-        return False  # End the game
+def update_game(screen):
+    global ball_x, ball_y, ball_dx, ball_dy, score1, score2, paused
+    if not paused:
+        # Update ball position
+        ball_x += ball_dx
+        ball_y += ball_dy
+        # Check for collision with top and bottom
+        if ball_y <= 0 or ball_y >= curses.LINES - 1:
+            ball_dy *= -1
+        # Check for collision with paddles
+        if ball_x <= 3 and paddle1_y <= ball_y <= paddle1_y + PADDLE_HEIGHT:
+            ball_dx *= -1
+            curses.beep()  # Sound effect for ball hitting the paddle
+        elif ball_x >= 76 and paddle2_y <= ball_y <= paddle2_y + PADDLE_HEIGHT:
+            ball_dx *= -1
+            curses.beep()  # Sound effect for ball hitting the paddle
+        # Check for scoring
+        if ball_x <= 0:
+            score2 += 1
+            reset_ball()
+        elif ball_x >= curses.COLS - 1:
+            score1 += 1
+            reset_ball()
     return True  # Continue the game
 
 # Function to reset the ball to the center
@@ -71,16 +93,16 @@ def reset_ball():
     ball_y = curses.LINES // 2
     ball_dx = BALL_SPEED
     ball_dy = BALL_SPEED
+    curses.beep()  # Sound effect for scoring
 
 # Main game loop
 def main(screen):
+    global paused
+    paused = False
     init_screen(screen)
     while True:
-        if not paused:
-            continue_game = update_game()
-            if not continue_game:
-                break
-        draw_screen(screen)
+        if draw_screen(screen) == False:
+            break
         key = screen.getch()
         # Handle paddle movement
         if key == ord('w') and paddle1_y > 0:
@@ -94,6 +116,10 @@ def main(screen):
         # Handle pause and resume
         elif key == 27:  # Escape key
             paused = not paused
+        if not paused:
+            continue_game = update_game(screen)
+            if not continue_game:
+                break
         curses.napms(50)  # Sleep for 50 milliseconds
 
 # Run the game
