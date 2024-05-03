@@ -98,8 +98,9 @@ def update_game(screen):
 # Function to reset the ball to a random position and direction
 def reset_ball():
     global ball_x, ball_y, ball_dx, ball_dy
-    # Randomize ball's vertical position anywhere on the screen
-    ball_y = random.randint(0, curses.LINES - 1)
+    # Randomize ball's vertical position within 80% of the screen height
+    vertical_margin = curses.LINES // 10  # 10% of the screen height from top and bottom
+    ball_y = random.randint(vertical_margin, curses.LINES - vertical_margin - 1)
     # Randomize ball's horizontal position within the middle 20% of the screen
     horizontal_middle = curses.COLS // 2
     offset = curses.COLS // 10  # 10% of the screen width to each side of the middle
