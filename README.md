@@ -6,7 +6,7 @@ This is a simple text-based version of the classic Pong game implemented in Pyth
 
 ## Gameplay
 
-The game features the classic Pong gameplay with two paddles and a ball. The objective is to score points by getting the ball past your opponent's paddle. The first player to reach 10 points wins the game.
+The game features the classic Pong gameplay with two paddles and a ball. The objective is to score points by getting the ball past your opponent's paddle. The first player to reach 5 points wins the game.
 
 ## Controls
 
@@ -20,7 +20,7 @@ To run the game, you will need Python 3 installed on your system. If you have Py
 
 1. Clone the repository:
    ```
-   git clone git@github.com:haslo/devin_pong_python.git
+   git clone https://github.com/haslo/devin_pong_python.git
    ```
 2. Navigate to the cloned repository directory:
    ```
