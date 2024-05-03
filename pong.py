@@ -102,7 +102,7 @@ def reset_ball():
 
 # Main game loop
 def main(screen):
-    global paused
+    global paused, paddle1_y, paddle2_y
     paused = False
     init_screen(screen)
     while True:

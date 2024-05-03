@@ -18,7 +18,7 @@ To run the game, you will need Python 3 installed on your system. If you have Py
 
 1. Clone the repository:
    ```
-   git clone https://github.com/haslo/devin_pong_python.git
+   git clone git@github.com:haslo/devin_pong_python.git
    ```
 2. Navigate to the cloned repository directory:
    ```
